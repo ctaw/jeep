@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" /> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+        <link rel="stylesheet" type="text/css" href="../css/index.css" />
+        <title>Jeepney</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../css/stylish-portfolio-one.css" rel="stylesheet">
+        <link href="../css/modified.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+        <!-- js customized -->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/scripts.js"></script>
+    </head>
+    <body>
+      <!-- Header -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <div class="btn-group pull-right" role="group" aria-label="...">
+              <a href="../index.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-home"></i></a>
+              <a href="start.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-reply"></i></a>
+            </div>
+            <a class="navbar-brand" href="#">Jeepney Routes</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="route-list" class="route-list">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              <h4 class="pull-left">List of Routes</h4>
+            </div>
+          </div>
+          <!-- /.row -->
+
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              <div class="search-div">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search" name="srch-term" id="filter" style="text-transform:uppercase;">
+                  <div class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.row -->
+          <input type="hidden" id="start-point" class="text"/>
+          <input type="hidden" id="end-point" class="text"/>
+
+          <input type="hidden" id="start-lat" class="text"/>
+          <input type="hidden" id="start-long" class="text"/>
+
+          <input type="hidden" id="end-lat" class="text"/>
+          <input type="hidden" id="end-long" class="text"/>
+          <br>
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              <div class="list-group">
+              </div>
+            </div>
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container -->
+      </section>
+
+      <script>
+        $("#filter").keyup(function(){
+          var filter = $(this).val(), count = 0;
+
+          $(".list-group .list-group-item").each(function(){
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+              $(this).fadeOut();
+            }else {
+                $(this).show();
+                count++;
+            }
+          });
+        });
+      </script>
+
+
+      <script>
+        // var ajax1 = $.ajax({
+        //   type: 'GET',
+        //   url: 'https://jeepney.herokuapp.com/api/routes.xml',
+        //   dataType: 'xml',
+        //   success: function(xmlDoc) {
+        //     var $xml = $(xmlDoc);
+        //     $xml.find('route').each(function() {
+        //       var id = $(this).find('id').text();
+        //       var start = $(this).find('start-name').text();
+        //       var end = $(this).find('end-name').text();
+
+        //       var start_lat = $(this).find('start-latitude').text();
+        //       var start_long = $(this).find('start-longitude').text();
+
+        //       var end_lat = $(this).find('end-latitude').text();
+        //       var end_long = $(this).find('end-longitude').text();
+
+        //       var department = start.split(',')[0];
+        //       var destination = end.split(',')[0];
+
+        //       $('#start-point').val(start);
+        //       $('#end-point').val(end);
+
+        //       $('#start-lat').val(start_lat);
+        //       $('#start-long').val(start_long);
+
+        //       $('#end-lat').val(end_lat);
+        //       $('#end-long').val(end_long);
+
+        //       // $(".list-group").append('<a href="locate.html?id='+ id + '&start='+ start +'&end='+ end +'" class="list-group-item routeBtn" id="'+ id +'">'+ department + " - " + destination +'</a>');
+        //     });
+        //   }
+        // }); 
+
+       
+        $.ajax({
+          type: 'GET',
+          url: 'https://jeepney.herokuapp.com/api/routes.xml',
+          dataType: 'xml',
+          success: function(xmlDoc) {
+            var $xml = $(xmlDoc);
+            $xml.find('routes').each(function() {
+              var id = $(this).find('id').text();
+              
+              var start = $(this).find('start-name').text();
+              var end = $(this).find('end-name').text();
+              var polyline = $(this).find('encoded-polyline').text();
+              var level = $(this).find('encoded-level').text();
+
+              var start_latitude = $(this).find('start-latitude').text();
+              var start_longitude = $(this).find('start-longitude').text();
+              var end_latitude = $(this).find('end-latitude').text();
+              var end_longitude = $(this).find('end-longitude').text();
+
+              var signBoard = $(this).find('sign-board').text();
+
+              var department = start.split(',')[0];
+              var destination = end.split(',')[0];
+
+
+
+              $(".list-group").append('<a href="locate.html?id='+ id + '&start='+ start +'&end='+ end +'&sLang='+ start_latitude + '&sLong=' + start_longitude + '&eLang='+ end_latitude +'&eLong='+ end_longitude +'&signboard='+ signBoard +'&polyline='+ polyline +'&level='+ level +'" class="list-group-item routeBtn" id="'+ id +'">'+ signBoard +'</a>');
+            });
+          }
+        }); 
+      </script>
+
+    
+        
+      <script type="text/javascript" src="cordova.js"></script>
+      <script type="text/javascript" src="../js/index.js"></script>
+      <script type="text/javascript">
+          app.initialize();
+      </script>
+    </body>
+</html>

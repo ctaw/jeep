@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" /> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+        <link rel="stylesheet" type="text/css" href="../css/index.css" />
+        <title>Jeepney</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../css/stylish-portfolio-one.css" rel="stylesheet">
+        <link href="../css/modified.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+        <!-- js customized -->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/scripts.js"></script>
+        <script src="../js/params.js"></script>
+
+        <!-- map js -->
+        <link href="../css/map.css" rel="stylesheet">
+
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+        <script src="../js/map_alternate.js"></script>
+        <!-- / map js -->
+
+        <!-- voice -->
+        <script src="http://responsivevoice.org/responsivevoice/responsivevoice.js"></script>
+        <script src="http://code.jquery.com/jquery-git2.js"></script>
+
+        <!-- sms -->
+        
+    </head>
+    <body>
+      <!-- Header -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <div class="btn-group pull-right" role="group" aria-label="...">
+              <a href="../index.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-home"></i></a>
+              <a href="start.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-reply"></i></a>
+            </div>
+            <a class="navbar-brand" href="#">Jeepney Routes</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="route-list" class="route-list">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              
+            </div>
+          </div>
+         
+          <div class="row">
+            <div class="col-lg-12 text-center" style="margin-top: 15px;">
+              <div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
+              
+              <div class="col-lg-8">
+                <input class="form-control input-sm" type="text" id="start" onkeypress="calcRoute();coordinates();" placeholder="Start:" name="input"><br/>
+                <input class="form-control input-sm" type="text" id="end" onkeypress="calcRoute();coordinates();" placeholder="End:" name="input">
+              </div>
+
+              <div class="col-lg-4">
+                <br>
+                <div id="zozo">
+                    <select id="mode" onchange="calcRoute();">
+                      <option value="WALKING">Walking</option>
+                      <option value="TRANSIT">Jeepney</option>
+                    </select>
+                </div>
+                <button class="btn btn-default btn-sm jeepneyLoc hidden">GO</button>
+              </div>
+              
+
+
+
+              <input type="text" id="voiceselection" class="hidden"/>
+              <input type="text" id="startingVoice" class="hidden"/>
+
+              <input onclick="audioPlay" type="button" value="Play" class="hidden"/>
+
+              <div class="routeResult">
+                <div class="input-group">
+                  <div class="input-group-addon" id="arrival-marker">
+                    <i class="fa fa-file-text-o" id="routePass"></i>
+                  </div>
+                  <h4><div id="result">Departure to Destination</div></h4>
+                </div>
+
+                <div class="row" id="downdiv" data-toggle="collapse" data-target="#demo"><i class="fa fa-chevron-down"></i></div>
+              </div>
+
+            </div>
+          </div>
+          <!-- /.row -->
+          <div class="row">
+            <div id="demo" class="collapse">
+              <div class="col-lg-6 text-center">
+                <div id="directions-panel"></div>
+              </div>
+              <div class="col-lg-6 text-center">
+                <!-- <div id="address_lat1"></div>
+                <div id="address_long1"></div>
+                <div id="address_lat2"></div>
+                <div id="address_long2"></div> -->
+                <div class="result-fare">
+                  <div id="fares-panel">
+                    <div class="title-fare">Total Distance (km)</div>
+                  </div>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <td>Km</td>
+                        <td>Reg</td>
+                        <td>Dis</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><div class="totalkm"></div></td>
+                        <td><div class="regFare"></div></td>
+                        <td><div class="disFare"></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="result-jeep">
+                  <div id="jeep-panel">
+                  </div>
+                  <table class="table table-hover" id="jeepneyTable">
+                    <tbody>
+                      <tr>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <br>
+                <div class="watchLoc"><a href="geolocation.html" class="btn btn-sm btn-warning">Watch my location</a></div>
+                <br>
+              </div>
+            </div>
+          </div>
+          
+              
+
+        </div>
+        <!-- /.container -->
+      </section>
+
+      <script>
+        $("#downdiv").click(function(){
+          $("#result-panel").toggle();
+        });
+      </script>
+
+      <script>
+        var start = document.getElementById('start').value;;
+        var end =  document.getElementById('end').value;
+
+        var voicelist = responsiveVoice.getVoices();
+
+        var vselect = "US English Female";
+
+        $("#voiceselection").val(vselect);
+        
+      </script>
+
+      <script>
+        var autocomplete = new google.maps.places.Autocomplete($("#start")[0], {});
+
+          google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+        });
+
+        var autocomplete = new google.maps.places.Autocomplete($("#end")[0], {});
+
+          google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+        });
+      </script>
+
+
+      <div id="map-canvas"></div>
+
+      <section id="fare-list" class="fare-list">
+        <div class="row">
+          <div class="col-md-6">
+            <form class="form-inline" id="fare">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-addon" id="fare-box">Distance</div>
+                  <input type="text" class="form-control" id="distance-box" disabled>
+                  <input type="text" class="form-control" id="fareInput">
+                </div>
+              </div>
+              <!-- / FARE -->
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <script type="text/javascript" src="cordova.js"></script>
+      <script type="text/javascript" src="../js/index.js"></script>
+      <script type="text/javascript">
+          app.initialize();
+      </script>
+    </body>
+</html>

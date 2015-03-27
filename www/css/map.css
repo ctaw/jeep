@@ -1,0 +1,56 @@
+#map-canvas {
+  height: 100%;
+  margin: 0px;
+  padding: 0px
+}
+
+#departure-marker{
+  background-color: transparent;
+  border: none;
+  color: #4C6BE8;
+  font-size: 20px;
+}
+
+#arrival-marker{
+  background-color: transparent;
+  border: none;
+  color: #F01A64;
+  font-size: 20px;
+}
+
+#geo-marker{
+  background-color: transparent;
+  border: none;
+  color: #F01A64;
+}
+
+#searchForm{
+  margin-top: 10px;
+}
+
+#routePass{
+  border: none;
+  font-size: 23px;
+  background-color: transparent;
+  color: #000;
+}
+
+#downdiv{
+  background-color: #E5E5E5;
+}
+
+#downdiv:hover{
+  background-color: #CDCCCC;
+  color: #fff;
+}
+.adp-legal{
+  display: none;
+}
+.adp-marker, .gmnoprint, .gm-style-cc{display: none;}
+
+#directions-panel, #fares-panel{
+  margin-top: 10px;
+}
+.title-fare{
+  color:#F01A64;
+}

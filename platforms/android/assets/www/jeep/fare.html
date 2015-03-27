@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" /> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+        <link rel="stylesheet" type="text/css" href="../css/index.css" />
+        <title>Jeepney</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../css/stylish-portfolio-one.css" rel="stylesheet">
+        <link href="../css/modified.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+        <!-- js customized -->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/scripts.js"></script>
+    </head>
+    <body>
+      <!-- Header -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <div class="btn-group pull-right" role="group" aria-label="...">
+              <a href="../index.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-home"></i></a>
+              <a href="start.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-reply"></i></a>
+            </div>
+            <a class="navbar-brand" href="#">Jeepney Routes</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="route-list" class="route-list">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              <br>
+              <h4 class="pull-left">List of Jeepney's Fare</h4>
+
+              <a href="matrix.html"class="pull-right btn btn-primary btn-sm"> Official </a>
+            </div>
+          </div>
+          <!-- /.row -->
+          <br>
+          <div class="row">
+            <div class="col-lg-12 text-center">
+
+              <div class="list-group">
+                <div class="table-responsive">
+                <table class="table table-hover table-striped table-bordered" id="jeepneyFare">
+                  <thead>
+                    <tr>
+                      <th>Km</th>
+                      <th>Regular</th>
+                      <th>Discounted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.container -->
+      </section>
+
+
+      <script>
+        $.ajax({
+          type: 'GET',
+          url: 'https://jeepney.herokuapp.com/api/fares.xml',
+          dataType: 'xml',
+          success: function(xmlDoc) {
+            var $xml = $(xmlDoc);
+            $xml.find('fare').each(function() {
+              var route_name = $(this).find('jeepney').text();
+              var kilometer = $(this).find('kilometer').text();
+              var regularFare = $(this).find('regular-fare').text();
+              var discountedFare = $(this).find('discounted-fare').text();
+
+              $('#jeepneyFare > tbody:last').after('<tr><td>'+ kilometer +'</td><td>'+ regularFare  +'</td><td>'+ discountedFare +'</td></tr>');
+            });
+          }
+        });   
+      </script>
+
+    
+        
+      <script type="text/javascript" src="cordova.js"></script>
+      <script type="text/javascript" src="../js/index.js"></script>
+      <script type="text/javascript">
+          app.initialize();
+      </script>
+    </body>
+</html>

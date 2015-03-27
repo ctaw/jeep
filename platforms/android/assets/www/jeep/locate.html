@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" /> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+        <link rel="stylesheet" type="text/css" href="../css/index.css" />
+        <title>Jeepney</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../css/stylish-portfolio-one.css" rel="stylesheet">
+        <link href="../css/modified.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="../font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+        <!-- js customized -->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/scripts.js"></script>
+        <script src="../js/params.js"></script>
+
+        <!-- map js -->
+        <link href="../css/map.css" rel="stylesheet">
+
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script> -->
+        <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>-->
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry&amp;sensor=false"></script>
+        <script src="../js/polyline.js"></script>
+        
+        <!-- / map js -->
+
+        <!-- voice -->
+        <script src="http://responsivevoice.org/responsivevoice/responsivevoice.js"></script>
+        <script src="http://code.jquery.com/jquery-git2.js"></script>
+
+        <!-- sms -->
+        
+    </head>
+    <body>
+      <!-- Header -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <div class="btn-group pull-right" role="group" aria-label="...">
+              <a href="../index.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-home"></i></a>
+              <a href="start.html" class="navbar-toggle collapsed btn-upper"><i class="fa fa-reply"></i></a>
+            </div>
+            <a class="navbar-brand" href="#">Jeepney Routes</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="route-list" class="route-list">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              <div id="warnings_panel" style="width:100%;height:10%;text-align:center"></div>
+              <form class="form-inline" id="searchForm">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-addon" id="departure-marker">
+                      <i class="fa fa-map-marker"></i>
+                    </div>
+                    <input type="text" class="form-control" id="newStart" />
+                    <input type="text" class="form-control hidden" id="start" onkeypress="calcRoute();coordinates();" placeholder="Departure">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-addon" id="arrival-marker">
+                      <i class="fa fa-map-marker"></i>
+                    </div>
+                    <input type="text" class="form-control" id="newEnd" />
+                    <input type="text" class="form-control hidden" id="end" onkeypress="calcRoute();coordinates();" placeholder="Destination">
+                  </div>
+                </div>
+
+                <input type="hidden" class="form-control" id="polyline">
+                <input type="hidden" class="form-control" id="level">
+              </form>
+
+              <div class="row">
+                <input type="submit" value="Search Now" class="btn btn-success btn-sm" onclick="searchLocation()" />
+              </div>
+              <input type="text" id="voiceselection" class="hidden"/>
+              <input type="text" id="startingVoice" class="hidden"/>
+
+              <input onclick="audioPlay" type="button" value="Play" class="hidden"/>
+
+              <div class="routeResult">
+                <div class="input-group">
+                  <div class="input-group-addon" id="arrival-marker">
+                    <i class="fa fa-file-text-o" id="routePass"></i>
+                  </div>
+                  <h4><div id="result">Departure to Destination</div></h4>
+                </div>
+                <input type="hidden" id="address_lat1">
+                <input type="hidden" id="address_long1">
+                <input type="hidden" id="address_lat2">
+                <input type="hidden" id="address_long2">
+                <input type="hidden" id="linktext">
+                <div class="row" id="downdiv" data-toggle="collapse" data-target="#demo"><i class="fa fa-chevron-down"></i></div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- /.row -->
+
+          <!-- Toggle -->
+          <div class="row">
+            <div id="demo" class="collapse">
+
+              <div class="col-lg-4 text-center">
+                <div id="specific-direction">
+                  <br>
+                  <div class="startPoint"></div>
+                    
+                    <table class="table table-bordered" id="jeepneyTable">
+                      <thead>
+                        <tr>
+                          <th colspan="2"></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  <div class="endPoint"></div>
+                </div>
+                <br>
+              </div>
+              <hr style="border-top: 1px solid #000;">
+              <div class="col-lg-4 text-center">
+                <br>
+                <div class="title-route">Direction Details</div>
+                <br>
+                <div id="directions-panel-old"></div>
+
+                <br>
+                <br>
+                <div class="btn-group" role="group" aria-label="...">
+                  <button class="showPdf hidden btn btn-info btn-sm">LTFRB Fare</button>
+                  <a href="geolocation.html" class="btn btn-sm btn-warning">Watch my location</a>
+                </div>
+
+                <br>
+                <br>
+                <hr style="border-top: 1px solid #000;">
+                <table class="table table-bordered" id="otherTable">
+                  <thead>
+                    <tr>
+                      <th>Jeep</th>
+                      <th>Landmark</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                    </tr>
+                  </tbody>
+                </table>
+
+                
+              </div>
+
+
+              <div class="col-lg-4 text-center">
+                <div class="newSearch hidden">
+                  <br>
+                  <div class="title-route">New Search</div>
+
+                  <div class="startNewPoint"></div>
+                    <div id="directions-panel"></div>
+                  <div class="endNewPoint"></div>
+                  <br>
+                  <br>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <td>Km</td>
+                        <td>Reg</td>
+                        <td>Dis</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><div class="totalkm"></div></td>
+                        <td><div class="regFare"></div></td>
+                        <td><div class="disFare"></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- /. Toggle -->
+
+
+          
+              
+
+        </div>
+        <!-- /.container -->
+      </section>
+
+  
+      <div id="map-canvas"></div>
+
+      <section id="fare-list" class="fare-list">
+        <div class="row">
+          <div class="col-md-6">
+            <form class="form-inline" id="fare">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-addon" id="fare-box">Fare</div>
+                  <input type="text" class="form-control" id="exampleInputAmount" disabled>
+                </div>
+                <div class="input-group">
+                  <div class="input-group-addon" id="fare-box">Distance</div>
+                  <input type="text" class="form-control distancebox" id="distancebox" disabled>
+                </div>
+              </div>
+              <!-- / FARE -->
+            </form>
+          </div>
+        </div>
+      </section>
+      
+      <script>
+        var getX = GetUrlValue('start');
+        var getY = GetUrlValue('end');
+
+        var start = getX.replace(/%20/g, " ");
+        var end = getY.replace(/%20/g, " ");
+
+        $("#start").val(start);
+        $("#end").val(end);
+
+        var x = GetUrlValue('polyline');
+        var y = GetUrlValue('level');
+        var z = GetUrlValue('signboard');
+
+        var signboard = z.replace(/%20/g, " ");
+        
+        $("#result").text(signboard);
+
+        $("#polyline").val(x);
+        $("#level").val(y);
+
+        // For Geocoder
+        var startLang = GetUrlValue('sLang');
+        var startLong = GetUrlValue('sLong');
+        var endLang = GetUrlValue('eLang');
+        var endLong = GetUrlValue('eLong');
+
+        $("#address_lat1").val(startLang);
+        $("#address_long1").val(startLong);
+        $("#address_lat2").val(endLang);
+        $("#address_long2").val(endLong);
+
+        var voicelist = responsiveVoice.getVoices();
+
+        var vselect = "US English Female";
+
+        $("#voiceselection").val(vselect);
+        $("#startingVoice").val("Searching Jeepney Route of " + signboard );
+      </script>
+
+
+      <script>
+        var route_id = GetUrlValue('id');
+
+        var ajax1 = $.ajax({ 
+          type: 'GET',
+          url: 'https://jeepney.herokuapp.com/api/routes/'+ route_id +'/',
+          dataType: 'xml',
+          success: function(xmlDoc) {
+            var $xml = $(xmlDoc);
+            $xml.find('route').each(function() {
+              var id = $(this).find('id').text();
+              var x = $(this).find('start-name').text();
+              var start = x.replace(/%20/g, " ");
+              var y = $(this).find('end-name').text();
+              var end = y.replace(/%20/g, " ");
+
+              // For Jeepney
+              var signboard = $(this).find('sign-board').text();
+              var fare = $(this).find('jeepney-fare').text();
+              var direction = $(this).find('jeepney-direction').text();
+              var link = $(this).find('link-file').text();
+              var landmark = $(this).find('landmark').text();
+
+
+              $(".startPoint").text(start);
+              $(".endPoint").text(end);
+
+              $('#jeepneyTable > tbody:last').append('<tr><td colspan="2">'+ signboard + "<br><br> Php: " + fare +'</td><td>'+direction+'</td></tr>');
+
+              $("#linktext").val(link);
+              var linkPDF = document.getElementById('linktext').value;
+              if((linkPDF != "")){
+                $(".showPdf").removeClass("hidden");
+
+                $(".showPdf").click(function() {
+                  window.open(link, '_system', 'location=yes')
+                });
+              }
+
+              var km = document.getElementById('distancebox').value;
+
+              $("#exampleInputAmount").val(fare);
+
+              $('#otherTable > tbody:last').append('<tr><td>'+ signboard + '</td><td>'+landmark+'</td></tr>');
+              
+            });
+          }                
+        });
+
+        var ajax2 = $.ajax({ 
+          type: 'GET',
+          url: 'https://jeepney.herokuapp.com/api/jeepney_routes/'+ route_id +'/',
+          dataType: 'xml',
+          success: function(xmlDoc) {
+            var $xml = $(xmlDoc);
+            $xml.find('jeepney-route').each(function() {
+              var id = $(this).find('id').text();
+              var title = $(this).find('title').text();
+              var regular = $(this).find('regular-fare').text();
+              var discounted = $(this).find('discounted-fare').text();
+              var min = $(this).find('estimated-time').text();
+              var direction = $(this).find('direction').text();
+
+              if(title == "Walking"){
+                $('#jeepneyTable > tbody:first').append('<tr><td colspan="2">'+ title + "<br><br>" + min +'</td><td>'+direction+'</td></tr>');
+              }else{
+                $('#jeepneyTable > tbody:first').append('<tr><td colspan="2">'+ title + "<br> R:" + reg + '<br> D: '+discounted +'</td><td>'+direction+'</td></tr>');
+              }
+              
+            });
+          }                
+        });
+      </script>
+
+
+      <script type="text/javascript"></script>
+
+      <script type="text/javascript" src="cordova.js"></script>
+      <script type="text/javascript" src="../js/index.js"></script>
+      <script type="text/javascript">
+          app.initialize();
+      </script>
+    </body>
+</html>

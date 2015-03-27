@@ -1,0 +1,108 @@
+.small{
+  font-size: 9px;
+}
+.setting-btn{
+  margin-top: 52px;
+  padding: 70px;
+  font-size: 45px;
+  color: #EA6A4A !important;
+}
+.setting-btn a {
+ color: #0197DE !important; 
+}
+
+.navbar-default .navbar-toggle {
+  border-color: #ddd;
+  color: #000;
+}
+
+.route-list{
+  margin-top: 50px;
+  padding: 5px;
+  /*padding: 60px 0;*/
+  background-color: #EAEAEA !important;
+}
+
+.fare-list{
+  padding: 15px;
+  background-color: #CDCCCC;
+}
+
+#fare-box{
+  background-color: transparent;
+  font-size: 15px;
+  color: #000;
+}
+
+.navbar-default {
+  background-color: #CDCCCC;
+  border-color: #999898;
+}
+.navbar-default .navbar-brand {
+  color: #272727;
+}
+.navbar-default .navbar-toggle {
+  border-color: #ddd;
+  color: #FFF;
+  background-color: #A3A3A3;
+}
+.search-div{
+  border: 1px solid #D8D4D4;
+  padding: 5px;
+}
+#zozo {
+  margin: 20px;
+  margin-top: 3px;
+}
+select {
+    border: 0px solid #DA9E04;
+    border-radius: 0px;
+    color: #ebebeb;
+    padding: 9px;
+    width: 160px;
+    -webkit-appearance: none;
+
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50px' height='50px'><polyline points='46.139,15.518 25.166,36.49 4.193,15.519'/></svg>") right no-repeat;
+    
+    background-color: #DA9E04;
+    background-transparency: 0.5;
+    background-position: right 15px top 7px;
+    background-size: 13px 18px;
+}
+select:active {
+    border: 1px solid #000;
+}
+.adp-agencies{
+  display: none;
+}
+
+.startPoint, .startNewPoint{
+  background-color: #4C6BE8;
+  color: #fff;
+  letter-spacing: 1px;
+  font-weight: 100;
+  padding: 5px;
+  font-size: 11px;
+}
+
+.endPoint, .endNewPoint{
+  background-color: #F01A64;
+  color: #fff;
+  letter-spacing: 1px;
+  font-weight: 100;
+  padding: 5px;
+  font-size: 11px;
+}
+
+.adp-placemark{
+  display: none;
+}
+
+.title-route{
+  color: #fff;
+  background-color: #FFA44C;
+  padding: 11px;
+  margin-bottom: 29px;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
